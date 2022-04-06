@@ -89,6 +89,10 @@ function validarFormulario( enviar ) {
     return validacion;
 }
 
+    console.log('Validación: ' + validacion + '\n');
+    console.log('____________________');
+    // Booleano final de la validación (true | false)
+    return validacion;
 
 /*
     Función mensajeError()
