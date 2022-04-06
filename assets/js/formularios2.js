@@ -271,6 +271,9 @@ function validarEmail( elemento ) {
 
     var validacion = validarObligatorio( elemento );
 
+    console.log('Validación en validarEmail():' + validacion + '\n');
+    console.log(validacion);
+
     switch ( validacion ) {
 
         case true:
