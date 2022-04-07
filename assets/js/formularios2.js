@@ -1,6 +1,6 @@
 /*
  * Gestión de eventos y formularios en JavaScript
-*/
+ */
 
 /*
     Ejemplo de función anónima (sin nombre)
@@ -50,7 +50,7 @@ window.onload = function() {
     @return: booleano
 */
 
-function validarFormulario( enviar ) {
+function validarFormulario(enviar) {
 
     // Objetos document HTML del formulario
     var formulario = document.getElementById("form")
@@ -65,13 +65,13 @@ function validarFormulario( enviar ) {
 
     // Validamos cada uno de los apartados con llamadas a sus funciones correspondientes.
     if (
-        validarSoloTexto( nombre )
-        // && validarNumero( edad, 0, 120 )
-        && validarEmail( email )
-        && validarTfno( tfno )
-        // && validarTextarea( mensaje, 3, 255 )
-        && confirm("¿Deseas enviar el formulario con estos datos?")
-    ){
+        validarSoloTexto(nombre) &&
+        validarNumero(edad, 18, 120) &&
+        validarEmail(email) &&
+        validarTfno(tfno) &&
+        validarTextarea(mensaje, 4, 255) &&
+        confirm("¿Deseas enviar el formulario con estos datos?")
+    ) {
         // El código de error 0 Devuelve TRUE ( @return = true )
         validacion = mensajeError(0);
         // return true; // validacion ahora vale TRUE
@@ -117,7 +117,7 @@ function validarFormulario( enviar ) {
     @return: Booleano
 */
 
-function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
+function mensajeError(error, elemento = "", min = 0, max = 300, id = "errores") {
 
     // Nombre del campo de formulario con errores de validación
     // Pasado a mayúsculas
@@ -131,15 +131,15 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
     texto += "en el campo '" + campo + "': ";
 
     // Elemento del DOM donde insertar el texto y aplicar estilos CSS
-    var etiquetaInfo = document.getElementById( id );
+    var etiquetaInfo = document.getElementById(id);
     etiquetaInfo.className = "danger";
 
-    if ( error != 0 ) {
+    if (error != 0) {
         // Se pone el foco en el elemento no válido
         elemento.focus();
     }
 
-    switch ( error ) {
+    switch (error) {
         case 0:
             texto = "Formulario válido!";
             etiquetaInfo.className = "success";
@@ -147,17 +147,17 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
 
             // Excepción a @return FALSE. El formulario es válido!
             validacion = true;
-        break;
+            break;
 
         case 1:
             texto += "No puede estar vacío!";
             etiquetaInfo.innerHTML = texto;
-        break;
+            break;
 
         case 2:
             texto += "Sólo acepta letras del alfabeto español y espacios en blanco";
             etiquetaInfo.innerHTML = texto;
-        break;
+            break;
 
         case 3:
             texto += "El correo electrónico no parece un email válido";
@@ -168,7 +168,20 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
             texto += "El Teléfono no parece un número válido";
             etiquetaInfo.innerHTML = texto;
             break;
-        // default:
+
+        case 5:
+            texto += "Debe estar comprendida entre ";
+            texto += min + " y " + max;
+            etiquetaInfo.innerHTML = texto;
+            break;
+
+        case 6:
+            texto += "La longitud del texto debe estar comprendida entre ";
+            texto += min + ' y ' + max + ' caracteres';
+            etiquetaInfo.innerHTML = texto;
+            break;
+
+            // default:
     }
 
     // Después de haber informado al usuario de dato a corregir
@@ -191,19 +204,19 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
     @return: Booleano
 */
 
-function validarObligatorio( elemento ) {
+function validarObligatorio(elemento) {
 
     // Valor de retorno por defecto: TRUE
     var validacion = true;
 
     if (
-        ( elemento.attributes["required"] == "true"
-            || elemento.required == true )
-        && !( elemento.value.trim().length > 0 )
-    ){
+        (elemento.attributes["required"] == "true" ||
+            elemento.required == true) &&
+        !(elemento.value.trim().length > 0)
+    ) {
         // El mensajeError(1) inserta un mensaje con la info del error en el DOM
         // y retorna FALSE
-        validacion = mensajeError( 1, elemento );
+        validacion = mensajeError(1, elemento);
         // return false;
     }
 
@@ -227,7 +240,7 @@ function validarObligatorio( elemento ) {
     @return: Booleano
 */
 
-function validarSoloTexto( elemento ) {
+function validarSoloTexto(elemento) {
 
     // Espresión regular para aceptar sólo letras del alfabeto español
     // y espacios en blanco
@@ -237,9 +250,9 @@ function validarSoloTexto( elemento ) {
     // validarObligatorio() Escribe un mensaje de error en el DOM
     // y devuelve true | false
 
-    var validacion = validarObligatorio( elemento );
+    var validacion = validarObligatorio(elemento);
 
-    switch ( validacion ) {
+    switch (validacion) {
 
         // Si el valor de 'validacion' es TRUE significa que
         // O no es obligagorio, o contiene algo
@@ -247,71 +260,112 @@ function validarSoloTexto( elemento ) {
         // Validación de campo obligatorio superada en case validacion = true
         case true:
             // Se ejecuta la validación por expresión regular ( true | false )
-            var resultadoExpRegular = expresionRegular.exec( elemento.value );
+            var resultadoExpRegular = expresionRegular.exec(elemento.value);
 
             // Si el resultado de la validación NO ES true
-            if ( !resultadoExpRegular ) {
+            if (!resultadoExpRegular) {
 
                 // Se ejecuta la función con el mensaje de error en DOM
                 // El mensajeError(2) inserta un mensaje de error en el DOM
                 // y retorna FALSE
-                validacion = mensajeError( 2, elemento );
+                validacion = mensajeError(2, elemento);
                 // validacion = false;
             }
-        break;
+            break;
 
-        // Si el valor de 'validacion' es FALSE no hay nada que hacer
-        // case false:
-        //     validacion = false
-        // break;
+            // Si el valor de 'validacion' es FALSE no hay nada que hacer
+            // case false:
+            //     validacion = false
+            // break;
 
-        // default:
+            // default:
     }
 
     // Se devuelve el resultado de la validación (true | false)
-    return validacion;}
+    return validacion;
+}
 
-function validarEmail( elemento ) {
+function validarEmail(elemento) {
 
     var expresionRegular = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
 
-    var validacion = validarObligatorio( elemento );
+    var validacion = validarObligatorio(elemento);
 
-    switch ( validacion ) {
+    switch (validacion) {
 
         case true:
 
-            var resultadoExpRegular = expresionRegular.exec( elemento.value );
+            var resultadoExpRegular = expresionRegular.exec(elemento.value);
 
-            if ( !resultadoExpRegular ) {
+            if (!resultadoExpRegular) {
 
-                validacion = mensajeError( 3, elemento );
+                validacion = mensajeError(3, elemento);
 
             }
-        break;
+            break;
     }
 
     return validacion;
 }
 
-function validarTfno( elemento ) {
+function validarTfno(elemento) {
 
-    var expresionRegular = /^[6-9]{1} [0-9]{8}$/;
+    var expresionRegular = /^[6-9]{1}[0-9]{8}$/;
 
-    var validacion = validarObligatorio( elemento );
+    var validacion = validarObligatorio(elemento);
 
-    switch ( validacion ) {
+    switch (validacion) {
 
         case true:
 
-            var resultadoExpRegular = expresionRegular.exec( elemento.value );
+            var resultadoExpRegular = expresionRegular.exec(elemento.value);
 
-            if ( !resultadoExpRegular ) {
+            if (!resultadoExpRegular) {
 
-                validacion = mensajeError( 4, elemento );
+                validacion = mensajeError(4, elemento);
 
             }
-        break;
+            break;
+    }
+
+    return validacion;
+}
+
+function validarNumero(elemento, minimo, maximo) {
+
+    var validacion = true;
+    console.log('Elemento.name :' + elemento.name + '\n');
+    console.log('Mínimo:' + minimo + '\n');
+    console.log('Máximo:' + maximo + '\n');
+
+    switch (validacion) {
+
+        case true:
+
+            if ((elemento.value < minimo || elemento.value > maximo)) {
+                validacion = mensajeError(5, elemento, minimo, maximo);
+            }
+            break;
+    }
+
+    return validacion;
+}
+
+function validarTextarea(elemento, minimo, maximo) {
+
+    // var validacion = true;
+    var validacion = validarObligatorio(elemento);
+
+    var texto = elemento.value;
+
+    switch (validacion) {
+
+        case true:
+
+            if (texto.length < minimo || texto.length > maximo) {
+                validacion = mensajeError(6, elemento, minimo, maximo);
+            }
+            break;
     }
 
     return validacion;
