@@ -57,7 +57,6 @@ function validarFormulario( enviar ) {
     var nombre = document.getElementById("name");
     var edad = document.getElementById("edad");
     var email = document.getElementById("email");
-    var tfno = document.getElementById("tfno");
     var mensaje = document.getElementById("mensaje");
 
     // Resultado de la validación: por defecto, FALSE
@@ -68,7 +67,6 @@ function validarFormulario( enviar ) {
         validarSoloTexto( nombre )
         // && validarNumero( edad, 0, 120 )
         && validarEmail( email )
-        && validarTfno( tfno )
         // && validarTextarea( mensaje, 3, 255 )
         && confirm("¿Deseas enviar el formulario con estos datos?")
     ){
@@ -150,6 +148,7 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
         break;
 
         case 1:
+
             texto += "No puede estar vacío!";
             etiquetaInfo.innerHTML = texto;
         break;
@@ -162,11 +161,7 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
         case 3:
             texto += "El correo electrónico no parece un email válido";
             etiquetaInfo.innerHTML = texto;
-            break;
 
-        case 4:
-            texto += "El Teléfono no parece un número válido";
-            etiquetaInfo.innerHTML = texto;
             break;
         // default:
     }
@@ -175,6 +170,7 @@ function mensajeError ( error, elemento="", min=0, max=300, id="errores" ) {
     // Retorna un booleado según el nº de error recibido
     return validacion;
 }
+
 
 /*
     Función validarObligatorio()
@@ -211,6 +207,7 @@ function validarObligatorio( elemento ) {
 
     return validacion;
 }
+
 
 /*
     Función validarSoloTexto()
@@ -269,7 +266,8 @@ function validarSoloTexto( elemento ) {
     }
 
     // Se devuelve el resultado de la validación (true | false)
-    return validacion;}
+    return validacion;
+}
 
 function validarEmail( elemento ) {
 
@@ -277,39 +275,17 @@ function validarEmail( elemento ) {
 
     var validacion = validarObligatorio( elemento );
 
+    console.log('Validación en validarEmail():' + validacion + '\n');
+    console.log(validacion);
+
     switch ( validacion ) {
 
         case true:
-
             var resultadoExpRegular = expresionRegular.exec( elemento.value );
 
             if ( !resultadoExpRegular ) {
 
                 validacion = mensajeError( 3, elemento );
-
-            }
-        break;
-    }
-
-    return validacion;
-}
-
-function validarTfno( elemento ) {
-
-    var expresionRegular = /^[6-9]{1} [0-9]{8}$/;
-
-    var validacion = validarObligatorio( elemento );
-
-    switch ( validacion ) {
-
-        case true:
-
-            var resultadoExpRegular = expresionRegular.exec( elemento.value );
-
-            if ( !resultadoExpRegular ) {
-
-                validacion = mensajeError( 4, elemento );
-
             }
         break;
     }
